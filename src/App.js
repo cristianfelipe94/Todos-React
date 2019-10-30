@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Task from "./Task";
+import "./App.scss";
 
 class App extends Component {
   constructor(props) {
@@ -18,7 +19,6 @@ class App extends Component {
   componentDidMount() {
     const taskStored = JSON.parse(localStorage.getItem("TaskStorage"));
     if (taskStored) {
-      console.log(taskStored)
       const taskDataStored = taskStored.map((task) => {
         console.log(task);
         const dataObject = {
@@ -44,7 +44,6 @@ class App extends Component {
 
   showAllTasks() {
     const allTasks = this.state.tasks.map((task) => {
-      console.log(task);
       return <Task task={task.task} stop={task.stop} start={task.start} descript={task.descript} save={this.saveTask} key={task.key} status={task.status}></Task>
     });
     this.setState({
@@ -73,7 +72,6 @@ class App extends Component {
     this.setState({
       dashboard: ""
     }, () => {
-      console.log(taskName, deadline, startDate, taskDescript, taskStatus);
       const savedData = {
         task: taskName,
         stop: deadline,
@@ -94,17 +92,16 @@ class App extends Component {
   }
 
   render() {
-    {console.log("Data is: ", this.state)}
     return(
-      <div>
-        <div>
+      <div className="app__layout">
+        <div className="app__nav">
           <button onClick={this.createTask}>Create new task</button>
           <button onClick={this.showAllTasks}>All tasks</button>
           <button onClick={() => this.showStatusTasks(false)}>Pending tasks</button>
           <button onClick={() => this.showStatusTasks(true)}>Completed tasks</button>
           <button onClick={this.clearDashboard}>Clear dashboard</button>
         </div>
-        <div id="dashboard">
+        <div className="app__dashboard">
           {this.state.dashboard}
         </div>
       </div>

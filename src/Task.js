@@ -8,15 +8,15 @@ const Task = ({task, stop, start, descript, status, save}) => {
   const [taskDescript, setTaskDescriptHandler] = useState("Default Descript.");
   const [taskStatus, setTaskStatusHandler] = useState(status !== "" ? status : false);
   return (
-    <div>
+    <div className="task__card">
       <label>
         Task Name
         <input type="text" onChange={e => setTaskNameHandler(e.target.value)} id="taskName" value={task !== "" ? task : taskName} />
       </label>
 
       <label>
-        Deadline
-        <input type="date" onChange={e => setDeadlineHandler(e.target.value)} id="deadline" value={stop !== "" ? stop : deadline} />
+        Task description
+        <input type="text" onChange={e => setTaskDescriptHandler(e.target.value)} id="taskDescript" value={descript !== "" ? descript : taskDescript} />
       </label>
 
       <label>
@@ -25,8 +25,8 @@ const Task = ({task, stop, start, descript, status, save}) => {
       </label>
 
       <label>
-        Task description
-        <input type="text" onChange={e => setTaskDescriptHandler(e.target.value)} id="taskDescript" value={descript !== "" ? descript : taskDescript} />
+        Deadline
+        <input type="date" onChange={e => setDeadlineHandler(e.target.value)} id="deadline" value={stop !== "" ? stop : deadline} />
       </label>
 
       <label>

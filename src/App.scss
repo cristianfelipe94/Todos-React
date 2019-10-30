@@ -1,0 +1,84 @@
+body {
+  background-color: #d2cece;
+  font-family: 'Roboto Condensed', sans-serif;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+::selection {
+  background-color: #a48bd3;
+  color: #323444;
+}
+
+button {
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  color: white;
+  font-family: 'Playfair Display', serif;
+}
+
+.app__layout {
+  display: flex;
+  flex-direction: row;
+}
+
+.app__nav {
+  background-color: #323444;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: fixed;
+  width: 25%;
+}
+
+.app__nav button {
+  font-size: 20px;
+  height: 20%;
+  transition: background-color 1s;
+
+  &:hover {
+    background-color: #a48bd3;
+    color: black;
+    transition: background-color 0.8s;
+  }
+}
+
+.app__dashboard {
+  height: fit-content;
+  padding: 50px;
+  position: relative;
+  right: -25%;
+}
+
+.task__card {
+  display: flex;
+  flex-direction: column;
+  padding: 25px 0;
+}
+
+.task__card label {
+  margin: 15px 0;
+}
+
+.task__card input {
+  margin: 0 20px;
+  padding: 10px;
+}
+
+.task__card button {
+  cursor: pointer;
+  border: none;
+  background-color: #323444;
+  color: white;
+  height: 40px;
+  transition: background-color 1s;
+  width: 50%;
+
+  &:hover {
+    background-color: #a48bd3;
+    color: black;
+    transition: background-color 0.8s;
+  }
+}
