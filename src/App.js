@@ -7,44 +7,51 @@ class App extends Component {
     super(props);
     this.state = {
       tasks: [],
-      dashboard: []
+      dashboard: [],
+      defaultId: ""
     }
     this.createTask=this.createTask.bind(this);
     this.showAllTasks=this.showAllTasks.bind(this);
     this.showStatusTasks=this.showStatusTasks.bind(this);
     this.clearDashboard=this.clearDashboard.bind(this);
     this.saveTask=this.saveTask.bind(this);
+    this.updateTask=this.updateTask.bind(this);
   }
 
   componentDidMount() {
     const taskStored = JSON.parse(localStorage.getItem("TaskStorage"));
     if (taskStored) {
       const taskDataStored = taskStored.map((task) => {
-        console.log(task);
         const dataObject = {
           task: task.task,
           stop: task.stop,
           start: task.start,
           descript: task.descript,
-          status: task.status
+          status: task.status,
+          id: task.id,
+          registered: task.registered
         }
         return dataObject;
       });
       this.setState({
         tasks: taskDataStored
+      }, () => {
+        this.setState({
+          defaultId: this.state.tasks.length
+        }, () => {console.log(this.state)})
       });
     }
   }
   
   createTask() {
     this.setState({
-      dashboard: <Task save={this.saveTask}></Task>
+      dashboard: <Task save={this.saveTask} id={this.state.defaultId} update={this.updateTask}></Task>
     })
   }
 
   showAllTasks() {
     const allTasks = this.state.tasks.map((task) => {
-      return <Task task={task.task} stop={task.stop} start={task.start} descript={task.descript} save={this.saveTask} key={task.key} status={task.status}></Task>
+      return <Task task={task.task} stop={task.stop} start={task.start} descript={task.descript} save={this.saveTask} update={this.updateTask} key={task.key} status={task.status} id={task.id} registered={true}></Task>
     });
     this.setState({
       dashboard: allTasks
@@ -54,7 +61,7 @@ class App extends Component {
   showStatusTasks(statuscheckbox) {
     const statusTasks = this.state.tasks.map((task) => {
       if(task.status === statuscheckbox) {
-        return <Task task={task.task} stop={task.stop} start={task.start} descript={task.descript} save={this.saveTask} key={task.key} status={task.status}/>
+        return <Task task={task.task} stop={task.stop} start={task.start} descript={task.descript} save={this.saveTask} update={this.updateTask} key={task.key} status={task.status} id={task.id} registered={true}/>
       }
     });
     this.setState({
@@ -68,7 +75,7 @@ class App extends Component {
     })
   }
 
-  saveTask(taskName, deadline, startDate, taskDescript, taskStatus) {
+  saveTask(taskName, deadline, startDate, taskDescript, taskStatus, id, registered) {
     this.setState({
       dashboard: ""
     }, () => {
@@ -79,15 +86,46 @@ class App extends Component {
         descript: taskDescript,
         save: this.saveTask,
         key: `${taskName}-${startDate}`,
-        status: taskStatus
+        status: taskStatus,
+        id: id,
+        resgistered: registered
       }
       const prevData = this.state.tasks;
       prevData.push(savedData);
       this.setState({
         tasks: prevData
       }, () => {
-        localStorage.setItem("TaskStorage", JSON.stringify(this.state.tasks))
+        this.setState({
+          defaultId: this.state.tasks.length
+        }, () => {
+          localStorage.setItem("TaskStorage", JSON.stringify(this.state.tasks))
+        })
       })
+    })
+  }
+
+  updateTask(taskName, deadline, startDate, taskDescript, taskStatus, id, registered) {
+    this.setState({
+      dashboard: ""
+    }, () => {
+      const updatedData = {
+        task: taskName,
+        stop: deadline,
+        start: startDate,
+        descript: taskDescript,
+        save: this.saveTask,
+        key: `${taskName}-${startDate}`,
+        status: taskStatus,
+        id: id,
+        registered: registered
+      }
+
+      this.state.tasks.splice(id, 1);
+
+      this.state.tasks.push(updatedData);
+
+      this.state.tasks.sort((a, b) => {return a.id - b.id})
+      localStorage.setItem("TaskStorage", JSON.stringify(this.state.tasks))
     })
   }
 

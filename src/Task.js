@@ -1,12 +1,19 @@
 import React, {useState} from "react";
 
-const Task = ({task, stop, start, descript, status, save}) => {
+const Task = ({task, stop, start, descript, status, id, save, update, registered}) => {
   const defaultDate = new Date().toLocaleDateString();
   const [taskName, setTaskNameHandler] = useState("Default Name.");
+  const [taskDescript, setTaskDescriptHandler] = useState("Default Descript.");
   const [deadline, setDeadlineHandler] = useState(defaultDate);
   const [startDate, setStartDateHandler] = useState(defaultDate);
-  const [taskDescript, setTaskDescriptHandler] = useState("Default Descript.");
   const [taskStatus, setTaskStatusHandler] = useState(status !== "" ? status : false);
+  const wasCreated = () => {
+    if(!registered) {
+      return save(taskName, deadline, startDate, taskDescript, taskStatus, id === "" ? 0 : id)
+    } else {
+      return update(taskName, deadline, startDate, taskDescript, taskStatus, id)
+    }
+  }
   return (
     <div className="task__card">
       <label>
@@ -34,7 +41,7 @@ const Task = ({task, stop, start, descript, status, save}) => {
         <input type="checkbox" onChange={() => setTaskStatusHandler(!taskStatus)} id="taskStatus" value={taskStatus} checked={taskStatus}/>
       </label>
 
-      <button onClick={() => save(taskName, deadline, startDate, taskDescript, taskStatus)}>Save task</button>
+      <button onClick={() => wasCreated()}>{!registered ? "Save Task" : "Update Task"}</button>
     </div>
   )
 };
@@ -46,5 +53,7 @@ Task.defaultProps = {
   stop: "",
   start: "",
   descript: "",
-  status: ""
+  status: "",
+  id: 0,
+  registered: false
 }
